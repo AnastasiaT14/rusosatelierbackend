@@ -5,7 +5,7 @@ from .models import Product, Category, ProductImageUrl
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'category', 'price']
 
 
 class ProductImageUrlSerializer(serializers.ModelSerializer):
@@ -13,6 +13,11 @@ class ProductImageUrlSerializer(serializers.ModelSerializer):
         model = ProductImageUrl
         fields = ['image_url', 'alt']
 
+class ProductDetailsSerializer(serializers.ModelSerializer):
+    image_urls = ProductImageUrlSerializer(many=True, source='product')
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'description', 'category', 'price', 'image_urls']
 
 class ProductEditSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=False)
@@ -23,14 +28,14 @@ class ProductEditSerializer(serializers.ModelSerializer):
 
 
 class ProductCreateSerializer(serializers.ModelSerializer):
-    image_urls = ProductImageUrlSerializer(many=True)
+    image_urls = ProductImageUrlSerializer(many=True, source='product')
 
     class Meta:
         model = Product
         fields = ['id', 'name', 'description', 'category', 'price', 'image_urls']
 
     def create(self, validated_data):
-        image_urls_data = validated_data.pop("image_urls")
+        image_urls_data = validated_data.pop("product")
         product = Product.objects.create(**validated_data)
         for image_url_data in image_urls_data:
             ProductImageUrl.objects.create(product=product, **image_url_data)
@@ -74,3 +79,18 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
+
+# class ProductCreateSerializer(serializers.ModelSerializer):
+#     image_urls = ProductImageUrlSerializer(many=True, required=False)
+
+#     class Meta:
+#         model = Product
+#         fields = ['id', 'name', 'description', 'category', 'price', 'image_urls']
+
+#     def create(self, validated_data):
+#         image_urls_data = validated_data.pop("image_urls", None)  # Handle the case when no image_urls are provided
+#         product = Product.objects.create(**validated_data)
+#         if image_urls_data:
+#             for image_url_data in image_urls_data:
+#                 ProductImageUrl.objects.create(product=product, **image_url_data)
+#         return product

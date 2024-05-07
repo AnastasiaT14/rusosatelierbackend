@@ -19,3 +19,5 @@ class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         exclude = ['date']
+
+

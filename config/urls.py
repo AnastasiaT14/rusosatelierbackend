@@ -8,5 +8,6 @@ urlpatterns = [
     path('contacts/add/', views.ContactsAdd.as_view(), name='contacts-add'),
     path('contacts/<int:pk>/update/', views.ContactsUpdate.as_view(), name='contacts-update'),
     path('contacts/<int:pk>/delete/', views.ContactsDelete.as_view(), name='contacts-delete'),
-    path('Feedback/create', views.FeedbackCreate.as_view(), name='Feedback-create')
+    path('Feedback/create/', views.FeedbackCreate.as_view(), name='Feedback-create'),
+    path('Feedback/list/', views.FeedbackList.as_view(), name='Feedback-list'),
 ]

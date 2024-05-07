@@ -13,14 +13,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
-DEBUG = os.getenv('DEBUG', False)
-DEBUG  = True
+DEBUG = True
+
 ALLOWED_HOSTS = [
     "*"
 ]
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -34,8 +33,7 @@ INSTALLED_APPS = [
     'config',
     'rest_framework_simplejwt',
     'corsheaders',
-    
-    
+    # Remove 'sqlite3' from here
 ]
 
 MIDDLEWARE = [
@@ -46,12 +44,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-    "django.middleware.common.CommonMiddleware",
+    # Remove 'sqlite3' from here
 ]
-
 ROOT_URLCONF = "atelier.urls"
 
 TEMPLATES = [

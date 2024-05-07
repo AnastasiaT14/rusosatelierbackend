@@ -23,3 +23,7 @@ class ContactsDelete(generics.DestroyAPIView):
 class FeedbackCreate(generics.CreateAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
+
+class FeedbackList(generics.ListAPIView):
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerializer
