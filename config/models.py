@@ -15,7 +15,7 @@ class Feedback(models.Model):
     date = models.DateField(auto_now_add=True)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
-    phone = models.IntegerField(max_length=9)
+    phone = models.IntegerField()
     email = models.EmailField()
 
 
