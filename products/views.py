@@ -5,7 +5,7 @@ from rest_framework import permissions
 
 
 class ProductCreate(generics.CreateAPIView):
-    permission_classes = [permissions.AllowAny]#adminze
+    permission_classes = [permissions.IsAdminUser]#adminze
     queryset = Product.objects.all()
     serializer_class = ProductCreateSerializer
 
@@ -24,14 +24,13 @@ class ProductDetail(generics.RetrieveAPIView):
 class ProductUpdate(generics.UpdateAPIView):
     permission_classes = [permissions.IsAdminUser]
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductCreateSerializer
 
 
 class ProductDelete(generics.DestroyAPIView):
     permission_classes = [permissions.IsAdminUser]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-
 
 # category
 class CategoryCreate(generics.CreateAPIView):
