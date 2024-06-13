@@ -1,8 +1,8 @@
+import sys
 from dotenv import load_dotenv
 import os
 from pathlib import Path
 from django.core.management.utils import get_random_secret_key
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,12 +28,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    'products',
-    'drf_spectacular',
-    'config',
-    'rest_framework_simplejwt',
-    'corsheaders',
-    # Remove 'sqlite3' from here
+    # "rest_framework_api_key",
+    "products",
+    "drf_spectacular",
+    "config",
+    "rest_framework_simplejwt",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -46,15 +46,15 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-    # Remove 'sqlite3' from here
+    "monitoring.middleware.RusosAtelierMiddleware",
 ]
+
 ROOT_URLCONF = "atelier.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates']
-        ,
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -77,6 +77,28 @@ DATABASES = {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {"format": "[%(levelname)s %(asctime)s] %(message)s"},
+        "simple": {"format": "[%(levelname)s %(asctime)s]"},
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
+            "formatter": "verbose",
+        }
+    },
+    "loggers": {
+        "root": {
+            "handlers": ["console"],
+            "level": "INFO",
+        }
+    },
 }
 
 # Password validation
@@ -114,38 +136,39 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "static/"
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    # YOUR SETTINGS
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        # "rest_framework_api_key.permissions.HasAPIKey",
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Rusos Atelier Api',
-    'DESCRIPTION': 'Your project description',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
+    "TITLE": "Rusos Atelier Api",
+    "DESCRIPTION": "Your project description",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 CORS_ALLOWED_ORIGIN_WHITELIST = [
-    "https://example.com",
-    "https://sub.example.com",
-    "http://localhost:8080",
-    "http://127.0.0.1:9000",
+    # "https://example.com",
+    # "https://sub.example.com",
+    # "http://localhost:8080",
+    # "http://127.0.0.1:9000",
+    "*"
 ]
+
 CORS_ALLOW_METHODS = [
     "DELETE",
     "GET",
@@ -154,6 +177,7 @@ CORS_ALLOW_METHODS = [
     "POST",
     "PUT",
 ]
+
 CORS_ALLOW_HEADERS = [
     "accept",
     "authorization",
@@ -162,5 +186,6 @@ CORS_ALLOW_HEADERS = [
     "x-csrftoken",
     "my-custom-header",
 ]
+
 CORS_ALLOW_CREDENTIALS = False
 CORS_ALLOW_PRIVATE_NETWORK = False
